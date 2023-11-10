@@ -1,0 +1,18 @@
+- name: Port State Event from Network Devices
+  hosts: all
+  sources:
+    - name: kafka 
+      ansible.eda.kafka:
+        host: my-cluster-kafka-brokers.default.svc.cluster.local
+        port: 9092
+        topic: telemetry
+  rules:
+    - name: Test network interface
+      condition: event.body.values.admin_status == "DOWN"
+      actions:
+        - print_event:
+            pretty: true
+        - run_job_template:
+            name: EDA_Interface_Admin_State
+            organization: Default
+            post_event: true

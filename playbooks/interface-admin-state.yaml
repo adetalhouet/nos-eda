@@ -1,0 +1,19 @@
+- name: Set Admin State to Up
+  hosts: "{{ ansible_eda.event.body.tags.source | regex_replace('^(?P<host>.+):(?P<port>\\d+)$', '\\g<host>') }}"
+  gather_facts: false
+  tasks:
+
+    - name: Admin State Up Arista
+      arista.eos.eos_interfaces:
+        config:
+          - name: "{{ ansible_eda.event.body.tags.interface_name }}"
+            enabled: true
+      when: ansible_network_os == 'arista.eos.eos'
+
+    - name: Admin State Up Nokia
+      nokia.srlinux.cli:
+        commands:
+          - enter candidate
+          - "interface {{ ansible_eda.event.body.tags.interface_name }} admin-state enable"
+          - commit now
+      when: ansible_network_os == 'nokia.srlinux.srlinux'

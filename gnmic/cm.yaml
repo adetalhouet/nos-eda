@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gnmi-exporter-kafka-targets
+  namespace: kne-multivendor
+data:
+  config: |
+    skip-verify: true
+    encoding: json_ietf
+    log: true
+
+    targets:
+      service-r1.kne-multivendor.svc.cluster.local:6030:
+        username: admin
+        password: admin
+      service-r2.kne-multivendor.svc.cluster.local:6030:
+        username: admin
+        password: NokiaSrl1!
+    subscriptions:
+      interface_status:
+        paths:
+            - /interfaces/interface[name=*]/state/admin-status/
+        # mode: STREAM
+        # stream-mode: on-change
+        stream-mode: sample
+        sample-interval: 5s
+
+    processors:
+      trim1:
+        event-strings:
+          value-names:
+            - ".*"
+          transforms:
+            - trim-prefix:
+                apply-on: "name"
+                prefix: "/interfaces/interface/state/"
+      trim2:
+        event-strings:
+          value-names:
+            - ".*"
+          transforms:
+            - trim-prefix:
+                apply-on: "name"
+                prefix: "/openconfig-interfaces:interfaces/interface/state/"
+      underscore:
+        event-strings:
+          value-names:
+            - ".*"
+          transforms:            
+            - replace:
+                apply-on: "name"
+                old: "-"
+                new: "_"
+
+    outputs:
+      kafka-output:
+        split-events: true
+        type: kafka
+        address: ${KAFKA_BROKERS}
+        topic: ${KAFKA_TOPIC}
+        event-processors:
+          - trim1
+          - trim2
+          - underscore

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: kne-multivendor
+  name: gnmi-exporter-kafka
+spec:
+  selector:
+    matchLabels:
+      app: gnmi-exporter-kafka
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gnmi-exporter-kafka
+    spec:
+      containers:
+        - name: gnmi-exporter-kafka
+          image: ghcr.io/openconfig/gnmic:latest
+          env:
+            - name: KAFKA_TOPIC
+              value: telemetry
+            - name: KAFKA_BROKERS
+              value: my-cluster-kafka-brokers.default.svc.cluster.local:9092
+          volumeMounts:
+            - name: targets
+              mountPath: /app/config
+          command: ["/bin/sh"]
+          args: ["-c", "./app/gnmic subscribe --config /app/config/gnmic.yaml"]
+      volumes:
+        - name: targets
+          configMap:
+            name: gnmi-exporter-kafka-targets
+            defaultMode: 420
+            items:
+              - key: config
+                path: gnmic.yaml
+

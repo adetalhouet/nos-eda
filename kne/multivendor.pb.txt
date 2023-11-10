@@ -1,0 +1,55 @@
+name:  "kne-multivendor"
+nodes: {
+    name: "r1"
+    vendor: ARISTA
+    model: "ceos"
+    os: "eos"
+    config: {
+        config_path: "/mnt/flash"
+        config_file: "startup-config"
+        file: "config/ceos-r1"
+        cert: {
+            self_signed: {
+                cert_name: "gnmiCert.pem",
+                key_name: "gnmiCertKey.pem",
+                key_size: 4096,
+            }
+        }
+        image: "image-registry.openshift-image-registry.svc:5000/openshift/ceos64:4.30.3M"
+    }
+    services:{
+        key: 6030
+        value: {
+            name: "gnmi"
+            inside: 6030
+        }
+    }
+}
+nodes: {
+    name: "r2"
+    vendor: NOKIA
+    model: "ixr6e"
+    config: {
+        image: "ghcr.io/nokia/srlinux:22.11.2"
+        file: "config/srlinux-r2"
+        cert: {
+            self_signed: {
+                cert_name: "kne-profile",
+                key_name: "N/A",
+                key_size: 4096,
+            }
+        }
+    }
+    interfaces: {
+        key: "e1-1"
+        value: {
+            name: "ethernet-1/1"
+        }
+    }
+}
+links: {
+    a_node: "r1"
+    a_int: "eth1"
+    z_node: "r2"
+    z_int: "e1-1"
+}
