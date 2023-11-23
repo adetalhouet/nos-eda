@@ -1,4 +1,6 @@
-# Multi-vendor close-loop automation with Event-Driven Ansible
+# Cloud-native multi-vendor close loop automation
+
+![](assets/high-level-arch.png)
 
 This demonstration uses [kne](https://github.com/openconfig/kne/tree/main) to create the networking topology. It uses [gnmic](https://github.com/openconfig/gnmic) for telemetry and a kafka bus where Event Driven Ansible listens to event.
 
@@ -6,11 +8,13 @@ This demonstration uses [kne](https://github.com/openconfig/kne/tree/main) to cr
 - go 1.21
 
 ### install kne
+```
 git clone https://github.com/openconfig/kne.git
 git checkout v0.1.15
 make install
 mv kne ~/.local/bin/
 kne version
+```
 
 ### deploy meshnet cni
 https://github.com/raballew/kne-on-ocp#deploy-meshnet-cni
