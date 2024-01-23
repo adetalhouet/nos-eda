@@ -97,8 +97,6 @@ ufJifhmpItpy3mkUCLEJ33ex2AA6
         }
     }
 }
-network-instance DEFAULT {
-}
 network-instance mgmt {
     protocols {
         gribi {
