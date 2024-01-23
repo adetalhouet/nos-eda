@@ -20,10 +20,10 @@ data:
       interface_status:
         paths:
             - /interfaces/interface[name=*]/state/admin-status/
-        # mode: STREAM
-        # stream-mode: on-change
-        stream-mode: sample
-        sample-interval: 5s
+        mode: STREAM
+        stream-mode: on-change
+        #stream-mode: sample
+        #sample-interval: 5s
 
     processors:
       trim1:
