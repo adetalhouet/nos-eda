@@ -40,6 +40,22 @@ nodes: {
             }
         }
     }
+    services:{
+        key: 8080
+        value: {
+            name: "jsonrpc"
+            inside: 80
+            outside: 8080
+        }
+    }
+    services:{
+        key: 9339
+        value: {
+            name: "gnmi"
+            inside: 57400 
+            outside: 9339
+        }
+    }
     interfaces: {
         key: "e1-1"
         value: {
