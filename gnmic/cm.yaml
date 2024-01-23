@@ -13,7 +13,7 @@ data:
       service-r1.kne-multivendor.svc.cluster.local:6030:
         username: admin
         password: admin
-      service-r2.kne-multivendor.svc.cluster.local:6030:
+      service-r2.kne-multivendor.svc.cluster.local:9339:
         username: admin
         password: NokiaSrl1!
     subscriptions:
